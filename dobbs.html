@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flying Black Square</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(45deg, #ff0080, #ff8c00, #ffd700, #00ff00, #00ffff, #0000ff, #800080);
+            background-size: 300% 300%;
+            animation: gradient 10s ease infinite;
+            overflow: hidden;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #square {
+            width: 137px;  /* Set width to image width */
+            height: 207px; /* Set height to image height */
+            background-image: url('black.png'); /* Ensure black.png is in the same directory */
+            background-size: cover;
+            position: absolute;
+            transition: transform 0.3s ease;
+            transform-origin: center;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: white;
+            color: black;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div id="square"></div>
+    <button onclick="location.reload()">Refresh Page</button>
+    <script>
+        const square = document.getElementById('square');
+
+        // Function to generate random starting positions
+        function getRandomPosition() {
+            const x = Math.random() * (window.innerWidth - 137); // Adjust for image width
+            const y = Math.random() * (window.innerHeight - 207); // Adjust for image height
+            return { x, y };
+        }
+
+        // Function to animate the square
+        function animateSquare() {
+            const { x, y } = getRandomPosition();
+            square.style.transform = `translate(${x}px, ${y}px) rotate(0deg)`;
+
+            // Wait for a short duration before landing in the center
+            setTimeout(() => {
+                square.style.transition = 'transform 1s ease';
+                square.style.transform = 'translate(-50%, -50%) rotate(360deg)'; // center and spin
+            }, 1000);
+
+            // Pulse twice after landing
+            setTimeout(() => {
+                pulse();
+                setTimeout(pulse, 300);
+            }, 2000);
+        }
+
+        // Function to pulse the square
+        function pulse() {
+            square.style.transform += ' scale(1.2)';
+            setTimeout(() => {
+                square.style.transform += ' scale(1)';
+            }, 300);
+        }
+
+        // Event listener for click
+        square.addEventListener('click', () => {
+            pulse();
+        });
+
+        // Start the animation
+        animateSquare();
+    </script>
+</body>
+</html>
+
